@@ -253,7 +253,8 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                               );
                         },
                       ),
-                    )
+                    ),
+                    height20
                   ],
                 ),
               ),

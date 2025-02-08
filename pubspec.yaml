@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^5.6.2
   firebase_storage: ^12.4.1
   flutter_bloc: ^9.0.0
+  easy_sidemenu: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - asset/loading.gif
+    - asset/beckham-david-male-males-wallpaper-preview-removebg-preview.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

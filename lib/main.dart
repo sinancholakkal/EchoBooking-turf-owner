@@ -1,4 +1,5 @@
 import 'package:echo_booking_owner/feature/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:echo_booking_owner/feature/presentation/bloc/time_slots/time_slots_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_login/screen_login.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_splash/screen_splash.dart';
 import 'package:echo_booking_owner/firebase_options.dart';
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBlocBloc(),
         ),
-        // BlocProvider(
-        //   create: (context) => SubjectBloc(),
-        // ),
+        BlocProvider(
+          create: (context) => TimeSlotsBloc(),
+        ),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

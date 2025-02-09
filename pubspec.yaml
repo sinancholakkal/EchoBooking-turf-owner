@@ -43,6 +43,10 @@ dependencies:
   easy_sidemenu: ^0.6.0
   intl: ^0.20.2
   time_range_picker: ^2.3.0
+  image_picker: ^1.1.2
+  geolocator: ^13.0.2
+  url_launcher: ^6.3.1
+  nominatim_geocoding: ^0.0.6
 
 dev_dependencies:
   flutter_test:

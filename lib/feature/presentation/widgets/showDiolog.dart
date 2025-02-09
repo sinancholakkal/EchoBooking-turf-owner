@@ -23,3 +23,26 @@ Future<dynamic> showDiolog({
           );
         });
   }
+
+   Future<dynamic> alertBox({
+    required BuildContext context,
+    required Function() onPressed,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Remove"),
+          content: Text("Are you sure want to remove time slot?"),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text("cancel")),
+            TextButton(onPressed: onPressed, child: Text("Ok"))
+          ],
+        );
+      },
+    );
+  }

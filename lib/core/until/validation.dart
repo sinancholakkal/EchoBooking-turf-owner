@@ -1,7 +1,7 @@
 class Validation {
   static String? emailValidation(String? value) {
     if (value == null || value.isEmpty) {
-      return "Password cannot be empty";
+      return "Email cannot be empty";
     } else if (!value.endsWith("@gmail.com")) {
       return "Invalid email address";
     } else {
@@ -53,6 +53,37 @@ class Validation {
   static String? addressValidate({required String? value}) {
     if (value == null || value.isEmpty) {
       return "Address is required";
+    } else {
+      return null;
+    }
+  }
+
+  static String? priceValidate({required String? value}) {
+    if (value == null || value.isEmpty) {
+      return "Price is required";
+    } else {
+      return null;
+    }
+  }
+
+  static String? includeValidate({required String? value}) {
+    if (value == null || value.isEmpty) {
+      return "Include is required";
+    } else {
+      return null;
+    }
+  }
+
+  static String? landMarkValidate({required String? value}) {
+    if (value == null || value.isEmpty) {
+      return "Landmark is required";
+    } else {
+      return null;
+    }
+  }
+  static String? stateAndCountryValidate({required String? value}) {
+    if (value == null || value.isEmpty) {
+      return "Please use current location";
     } else {
       return null;
     }

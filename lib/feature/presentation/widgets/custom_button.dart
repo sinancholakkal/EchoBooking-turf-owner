@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
     super.key,
      this.screenWidth,
     required this.text,
-    this.onTap,
+    required this.onTap,
     this.width = 80,
     this.height = 50,
     this.radius = 30,
@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         // width:screenWidth!=null? screenWidth !* .80 : width,
-        width: (screenWidth!>500)? registerTextxFormFieldWidth : screenWidth !*0.85,
+        width: (width!=80)?width:(screenWidth!>500)? registerTextxFormFieldWidth : screenWidth !*0.85,
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),

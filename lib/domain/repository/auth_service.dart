@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class AuthService {
   final _auth = FirebaseAuth.instance;
   String? uidOfUser;
+  
 
   //cheking login status
   bool checkLoginStatus(){

@@ -5,9 +5,10 @@ import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+  ValueNotifier<List<Uint8List>> images = ValueNotifier([]);
 class ImageAddingPart extends StatelessWidget {
   ImageAddingPart({super.key});
-  ValueNotifier<List<Uint8List>> images = ValueNotifier([]);
+
 
   Future<void> imagePicking() async {
     ImagePicker imagePicker = ImagePicker();
@@ -20,7 +21,6 @@ class ImageAddingPart extends StatelessWidget {
     }
   }
 
-  ValueNotifier<List<Uint8List>> get getImages => images;
 
   @override
   Widget build(BuildContext context) {

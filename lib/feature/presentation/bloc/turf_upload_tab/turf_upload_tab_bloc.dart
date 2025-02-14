@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
@@ -28,6 +29,8 @@ class TurfUploadTabBloc extends Bloc<TurfUploadTabEvent, TurfUploadTabState> {
       Map<String, List<Map<String, dynamic>>> timeSlots =
           await timeSlotesServises.addTimeSlot(
               event.selectedKey, event.context);
+              log(timeSlots.toString());
+              log("=====================================");
       emit(SuccessState(timeSlots: timeSlots, selectIndex: event.index));
     });
 
@@ -58,6 +61,21 @@ class TurfUploadTabBloc extends Bloc<TurfUploadTabEvent, TurfUploadTabState> {
          // log(timeSlotesServises.timeSlots.toString());
           //emit(SuccessState(timeSlots: timeSlotesServises.timeSlots, selectIndex: 0));
         }
+      },
+    );
+    on<UpdateInitialDateEvent>(
+      (event, emit) async {
+        timeSlotesServises.timeSlots = event.timeSlots;
+        log(event.timeSlots.toString());
+        log("=====================================");
+        emit(SuccessState(timeSlots: event.timeSlots, selectIndex: 0));
+      },
+    );
+
+     on<ResetStateEvent>(
+      (event, emit) async {
+        timeSlotesServises.timeSlots.clear();
+        emit(SuccessState(timeSlots: timeSlotesServises.timeSlots, selectIndex: 0));
       },
     );
   }

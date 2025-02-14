@@ -8,12 +8,15 @@ import 'package:echo_booking_owner/core/until/validation.dart';
 import 'package:echo_booking_owner/domain/models/turf_model.dart';
 import 'package:echo_booking_owner/domain/repository/location_service.dart';
 import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
+import 'package:echo_booking_owner/domain/repository/turf_service.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_upload_tab/turf_upload_tab_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/image_add_part_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/text_form_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/custom_button.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/flutter_toast.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/heading_text.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/loading_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/showDiolog.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +28,16 @@ import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class TabTurfUpload extends StatefulWidget {
-  TabTurfUpload({super.key});
+  final ActionType type;
+  TurfModel? turfModel;
+  TabTurfUpload({super.key, required this.type, this.turfModel});
 
   @override
   State<TabTurfUpload> createState() => _TabTurfUploadState();
 }
 
 class _TabTurfUploadState extends State<TabTurfUpload> {
-  final ValueNotifier<String> initialDropDown = ValueNotifier("Football");
+  late ValueNotifier<String> initialDropDown;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _turfName;
   late TextEditingController _phone;
@@ -51,17 +56,83 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     "Basketball",
   ];
 
+  Future<void> saveButton(BuildContext context) async {
+    Position position = await LocationRepo.getingPosition();
+    TurfModel turfModel = TurfModel(
+      turfId: (ActionType.addTurf == widget.type)
+          ? getRandomId()
+          : widget.turfModel!.turfId,
+      turfName: _turfName.text,
+      phone: _phone.text,
+      email: _email.text,
+      price: _price.text,
+      state: _state.value.text,
+      country: _country.value.text,
+      catogery: initialDropDown.value,
+      includes: _inclueds.text,
+      landmark: _landmark.text,
+      latitude: position.latitude.toString(),
+      longitude: position.longitude.toString(),
+      timeSlots: timeSlots,
+    );
+    if (ActionType.addTurf == widget.type) {
+      context.read<TurfManagingBloc>().add(AddTurfEvent(turfModel: turfModel));
+    } else {
+      context
+          .read<TurfManagingBloc>()
+          .add(UpdateTurfEvent(turfModel: turfModel));
+      print("================================================");
+    }
+  }
+
   @override
   void initState() {
-    context.read<TurfUploadTabBloc>().add(AddDateInitialEvent());
-    _turfName = TextEditingController();
-    _phone = TextEditingController();
-    _email = TextEditingController();
-    _price = TextEditingController();
-    _inclueds = TextEditingController();
-    _landmark = TextEditingController();
-    _state = ValueNotifier(TextEditingController());
-    _country = ValueNotifier(TextEditingController());
+    initialDropDown = ValueNotifier((ActionType.editTurf == widget.type)
+        ? widget.turfModel!.catogery
+        : "Football");
+    if (ActionType.addTurf == widget.type) {
+      context.read<TurfUploadTabBloc>().add(ResetStateEvent());
+      context.read<TurfUploadTabBloc>().add(AddDateInitialEvent());
+    } else {
+      images.value.addAll(widget.turfModel!.images ?? []);
+      print(images.value);
+      print("=============================");
+      context
+          .read<TurfUploadTabBloc>()
+          .add(UpdateInitialDateEvent(timeSlots: widget.turfModel!.timeSlots));
+    }
+    _turfName = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.turfName
+            : "");
+    _phone = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.phone
+            : "");
+    _email = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.email
+            : "");
+    _price = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.price
+            : "");
+    _inclueds = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.includes
+            : "");
+    _landmark = TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.landmark
+            : "");
+    _state = ValueNotifier(TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.state
+            : ""));
+    _country = ValueNotifier(TextEditingController(
+        text: (ActionType.editTurf == widget.type)
+            ? widget.turfModel!.country
+            : ""));
     super.initState();
   }
 
@@ -73,6 +144,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     _price.dispose();
     _inclueds.dispose();
     _landmark.dispose();
+    TimeSlotesServises().timeSlots.clear();
     super.dispose();
   }
 
@@ -80,10 +152,19 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
   Widget build(BuildContext context) {
     return BlocListener<TurfManagingBloc, TurfManagingState>(
       listener: (context, state) {
-        if(state is TurfLoadingState){
+        if (state is AddLoadingState) {
           print("Loading===========================================");
-        }else if(state is TurfLoadedState){
+          loadingWidget(context);
+        } else if (state is AddSuccessState) {
+          fluttertoast(msg: "Turf Successfully Added");
           print("Turf added=================================================");
+        } else if (state is UpdateLoadingState) {
+          print("updat Loading===========================================");
+          loadingWidget(context);
+        } else if (state is UpdateLoadedState) {
+          Navigator.pop(context);
+          fluttertoast(msg: "Turf data updated");
+          print("updated ===========================================");
         }
       },
       child: Padding(
@@ -199,7 +280,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                           },
                           readOnly: true,
                           controller: value,
-                          labelText: "City",
+                          labelText: "Country",
                           width: 400,
                           enableBorderColor:
                               const Color.fromRGBO(141, 188, 227, 1),
@@ -256,7 +337,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                         int selectedDateIndex = state.selectIndex;
                         //log(selectedDateIndex.toString());
                         timeSlots = state.timeSlots;
-                        //log(timeSlots.toString());
+                        print(timeSlots.toString());
                         List<String> dateKeys = state.timeSlots.keys.toList();
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -368,6 +449,9 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                                             onPressed: () {},
                                             onLongPress: () {
                                               alertBox(
+                                                  content:
+                                                      "Are you sure want to remove time slot?",
+                                                  title: "Remove",
                                                   context: context,
                                                   onPressed: () {
                                                     context
@@ -425,43 +509,39 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                   TextWidget(text: "Image"),
                   ImageAddingPart(),
                   height10,
-
-                  //Add turf button-------------------------------
                   Center(
-                      child: CustomButton(
-                    text: "Add Turf",
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        if (images.value.isEmpty) {
-                          print("Not Validated--------------------");
-                        } else {
-                          print(" Validated--------------------");
-                          Position position =
-                              await LocationRepo.getingPosition();
-                          TurfModel turfModel = TurfModel(
-                            turfId: getRandomId(),
-                            turfName: _turfName.text,
-                            phone: _phone.text,
-                            email: _email.text,
-                            price: _price.text,
-                            state: _state.value.text,
-                            country: _country.value.text,
-                            catogery: initialDropDown.value,
-                            includes: _inclueds.text,
-                            landmark: _landmark.text,
-                            latitude: position.latitude.toString(),
-                            longitude: position.longitude.toString(),
-                            timeSlots: timeSlots,
-                          );
-                          context
-                              .read<TurfManagingBloc>()
-                              .add(AddTurfEvent(turfModel: turfModel));
-                        }
-                      } else {
-                        print("Not Validated--------------------");
-                      }
-                    },
-                    width: 250,
+                      child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 10,
+                    children: [
+                      //turf update and turf add button-----------------
+                      CustomButton(
+                        text: (ActionType.editTurf == widget.type)
+                            ? "Update turf"
+                            : "Add Turf",
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            if (images.value.isEmpty) {
+                              print("Not Validated--------------------");
+                            } else {
+                              print(" Validated--------------------");
+
+                              saveButton(context);
+                            }
+                          } else {}
+                        },
+                        width: 250,
+                      ),
+                      
+                      Visibility(
+                        visible: (ActionType.addTurf==widget.type)?false:true,
+                        child: CustomButton(
+                          text: "Delete Turf",
+                          onTap: () {},
+                          width: 250,
+                        ),
+                      )
+                    ],
                   )),
                   height20
                 ],
@@ -477,4 +557,9 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     final Random random = Random();
     return "turf_${random.nextInt(10000000)}";
   }
+}
+
+enum ActionType {
+  addTurf,
+  editTurf,
 }

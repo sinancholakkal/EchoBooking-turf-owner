@@ -11,6 +11,7 @@ class TurfModel {
   final String landmark;
   final String latitude;
   final String longitude;
+   List<String>?images;
   final Map<String, List<Map<String, dynamic>>> timeSlots;
   TurfModel({
     required this.turfId,
@@ -26,5 +27,6 @@ class TurfModel {
     required this.latitude,
     required this.longitude,
     required this.timeSlots,
+     this.images
   });
 }

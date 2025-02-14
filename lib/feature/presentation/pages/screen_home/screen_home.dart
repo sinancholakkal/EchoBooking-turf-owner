@@ -101,7 +101,7 @@ class _ScreenHomeState extends State<ScreenHome> {
               TabDashboard(),
               TabTurfs(),
               TabBookings(),
-              TabTurfUpload(),
+              TabTurfUpload(type: ActionType.addTurf,),
               TabProfile()
             ],
           ))

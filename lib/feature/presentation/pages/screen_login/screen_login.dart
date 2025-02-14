@@ -53,6 +53,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
             );
           } else if (state is AuthErrorState) {
             if (state.errorMessage == "invalid-credential") {
+              Navigator.pop(context);
               showDiolog(
                 context: context,
                 title: "Incorrect Password",

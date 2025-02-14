@@ -25,5 +25,10 @@ class DateSelectIdxEvent extends TurfUploadTabEvent{
   int selectIndex;
   DateSelectIdxEvent({required this.selectIndex});
 }
+class UpdateInitialDateEvent extends TurfUploadTabEvent{
+  final Map<String,List<Map<String,dynamic>>> timeSlots;
+  UpdateInitialDateEvent({required this.timeSlots});
+}
 class ImagePickerEvent extends TurfUploadTabEvent{
 }
+class ResetStateEvent extends TurfUploadTabEvent{}

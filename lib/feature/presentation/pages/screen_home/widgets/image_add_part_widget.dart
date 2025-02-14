@@ -2,13 +2,16 @@ import 'dart:typed_data';
 
 import 'package:echo_booking_owner/core/constent/size/size.dart';
 import 'package:echo_booking_owner/core/theme/colors.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/flutter_toast.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/showDiolog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-  ValueNotifier<List<Uint8List>> images = ValueNotifier([]);
+//ValueNotifier<List<Uint8List>> images = ValueNotifier([]);
+ValueNotifier<List<dynamic>> images = ValueNotifier([]);
+
 class ImageAddingPart extends StatelessWidget {
   ImageAddingPart({super.key});
-
 
   Future<void> imagePicking() async {
     ImagePicker imagePicker = ImagePicker();
@@ -20,7 +23,6 @@ class ImageAddingPart extends StatelessWidget {
       images.notifyListeners();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +36,36 @@ class ImageAddingPart extends StatelessWidget {
               //main image container-----------------
               Row(
                 children: [
-                  Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: (value.isEmpty)?Colors.red : kblue, width: borderWidth),
-                        borderRadius: radius),
-                    child: (value.isNotEmpty)
-                        ? ClipRRect(
-                            borderRadius: radius,
-                            child: Image.memory(
-                              value.last,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : null,
+                  InkWell(
+                    onLongPress: () {
+                      alertBox(context: context, onPressed: (){
+                        images.value.removeLast();
+                        images.notifyListeners();
+                        Navigator.pop(context);
+                        fluttertoast(msg: "Image removed");
+                      }, title: "Remove", content: "Are you sure want to remove this image?");
+                    },
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: (value.isEmpty) ? Colors.red : kblue,
+                              width: borderWidth),
+                          borderRadius: radius),
+                      child: (value.isNotEmpty)
+                          ? ClipRRect(
+                              borderRadius: radius,
+                              child: (value.last is String)
+                                  ? Image.network(value.last,fit: BoxFit.cover,)
+                                  : Image.memory(value.last,fit: BoxFit.cover,)
+                              // child: Image.memory(
+                              //   value.last,
+                              //   fit: BoxFit.cover,
+                              // ),
+                              )
+                          : null,
+                    ),
                   ),
                   //image add button------------------
                   IconButton(
@@ -68,21 +85,37 @@ class ImageAddingPart extends StatelessWidget {
                       spacing: 10,
                       direction: Axis.horizontal,
                       children: List.generate(value.length, (index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 3,
-                              color: kblue,
+                        return InkWell(
+                          onLongPress: () {
+                      alertBox(context: context, onPressed: (){
+                        images.value.removeAt(index);
+                        images.notifyListeners();
+                        Navigator.pop(context);
+                        fluttertoast(msg: "Image removed");
+                      }, title: "Remove", content: "Are you sure want to remove this image?");
+                    },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 3,
+                                color: kblue,
+                              ),
+                              borderRadius: radius,
                             ),
-                            borderRadius: radius,
-                          ),
-                          width: 100,
-                          height: 100,
-                          child: ClipRRect(
-                            borderRadius: radius,
-                            child: Image.memory(
-                              value[index],
-                              fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: radius,
+                              child: (value[index] is String)
+                                  ? Image.network(
+                                      value[index],
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.memory(value[index],fit: BoxFit.cover,),
+                              // child: Image.memory(
+                              //   value[index],
+                              //   fit: BoxFit.cover,
+                              // ),
                             ),
                           ),
                         );

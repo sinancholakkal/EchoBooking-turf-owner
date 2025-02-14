@@ -5,6 +5,17 @@ sealed class TurfManagingState {}
 
 final class TurfManagingInitial extends TurfManagingState {}
 
-class TurfLoadingState extends TurfManagingState{}
+class AddLoadingState extends TurfManagingState{}
 
-class TurfLoadedState extends TurfManagingState{}
+class AddSuccessState extends TurfManagingState{}
+
+class FetchLoadingState extends TurfManagingState{}
+
+class FetchLoadedState extends TurfManagingState{
+  final List<TurfModel> listTurfModel;
+  FetchLoadedState({required this.listTurfModel});
+}
+
+class UpdateLoadingState extends TurfManagingState{}
+
+class UpdateLoadedState extends TurfManagingState{}

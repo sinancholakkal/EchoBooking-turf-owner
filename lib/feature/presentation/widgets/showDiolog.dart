@@ -24,16 +24,20 @@ Future<dynamic> showDiolog({
         });
   }
 
+
+
    Future<dynamic> alertBox({
     required BuildContext context,
     required Function() onPressed,
+        required String title,
+    required String content,
   }) {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Remove"),
-          content: Text("Are you sure want to remove time slot?"),
+          title: Text(title),
+          content: Text(content),
           actions: [
             TextButton(
                 onPressed: () {

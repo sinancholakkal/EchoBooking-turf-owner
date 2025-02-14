@@ -13,13 +13,41 @@ class TurfManagingBloc extends Bloc<TurfManagingEvent, TurfManagingState> {
   TurfService turfService = TurfService();
   TurfManagingBloc() : super(TurfManagingInitial()) {
     on<AddTurfEvent>((event, emit) async{
-      emit(TurfLoadingState());
+      emit(AddLoadingState());
       try{
         await turfService.addTurf(event.turfModel);
-        emit(TurfLoadedState());
+        emit(AddSuccessState());
       }on FirebaseException catch(e){
         log(e.code);
       }
     });
+     on<FetchTurfsEvent>((event, emit) async{
+      emit(FetchLoadingState());
+      log("Event called======================");
+      try{
+       List<TurfModel> listTurfModel = await turfService.fetchturfs();
+       log(listTurfModel.length.toString());
+        emit(FetchLoadedState(listTurfModel: listTurfModel));
+      }on FirebaseException catch(e){
+        log(e.code);
+      }
+    });
+
+
+
+    on<UpdateTurfEvent>((event, emit) async{
+      emit(UpdateLoadingState());
+      log("update Event called======================");
+      try{
+       await turfService.updateTurf(event.turfModel);
+       emit(UpdateLoadedState());
+       List<TurfModel> listTurfModel = await turfService.fetchturfs();
+        emit(FetchLoadedState(listTurfModel: listTurfModel));
+      }on FirebaseException catch(e){
+        log(e.code);
+      }
+    });
+    
+    
   }
 }

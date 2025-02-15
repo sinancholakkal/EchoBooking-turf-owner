@@ -80,43 +80,9 @@ class TurfService {
       batch.set(timeSlotDoc, {"time_slot": value});
     });
 
-    // Commit all updates at once
     await batch.commit();
   }
 
-  // Future<void>updateTurf(TurfModel turfModel)async{
-  //   turfModel.images = await uploadImagesToCloudinary(images.value);
-  //   await FirebaseFirestore.instance
-  //       .collection("owner")
-  //       .doc(ownerId.currentUser!.uid)
-  //       .collection("turfs")
-  //       .doc(turfModel.turfId)
-  //       .update({
-  //     "turfname": turfModel.turfName,
-  //     "phone": turfModel.phone,
-  //     "email": turfModel.email,
-  //     "price": turfModel.price,
-  //     "state": turfModel.state,
-  //     "country": turfModel.country,
-  //     "latitude": turfModel.latitude,
-  //     "longitude": turfModel.longitude,
-  //     "catogery": turfModel.catogery,
-  //     "includes": turfModel.includes,
-  //     "landmark": turfModel.landmark,
-  //     "images": turfModel.images,
-  //     "turfid": turfModel.turfId,
-  //   });
-  //   turfModel.timeSlots.forEach((key, value) async {
-  //     await FirebaseFirestore.instance
-  //         .collection("owner")
-  //         .doc(ownerId.currentUser!.uid)
-  //         .collection("turfs")
-  //         .doc(turfModel.turfId)
-  //         .collection("timeSlotes")
-  //         .doc(key)
-  //         .set({"time_slot": value});
-  //   });
-  // }
 
   Future<List<TurfModel>> fetchturfs() async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
@@ -186,6 +152,19 @@ class TurfService {
       listTurfModel.add(turfModel);
     }
     return listTurfModel;
+  }
+  Future<void>deleteTurf(String turfId)async{
+     final firestore = FirebaseFirestore.instance;
+    final ownerDoc =
+        firestore.collection("owner").doc(ownerId.currentUser!.uid);
+    final turfDoc = ownerDoc.collection("turfs").doc(turfId);
+
+    final dateDocs = await turfDoc.collection("timeSlotes").get();
+    for(var doc in dateDocs.docs){
+      await doc.reference.delete();
+    }
+     await turfDoc.delete();
+    
   }
 
   Future<List<String>> uploadImagesToCloudinary(List<dynamic> images) async {

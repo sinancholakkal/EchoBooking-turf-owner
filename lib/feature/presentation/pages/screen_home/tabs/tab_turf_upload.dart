@@ -156,15 +156,25 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
           print("Loading===========================================");
           loadingWidget(context);
         } else if (state is AddSuccessState) {
+          Navigator.pop(context);
           fluttertoast(msg: "Turf Successfully Added");
+          
           print("Turf added=================================================");
         } else if (state is UpdateLoadingState) {
           print("updat Loading===========================================");
           loadingWidget(context);
         } else if (state is UpdateLoadedState) {
           Navigator.pop(context);
+          Navigator.pop(context);
           fluttertoast(msg: "Turf data updated");
           print("updated ===========================================");
+        }else if(state is DeleteLoadingState){
+          print("Delete loading state==========================");
+          loadingWidget(context);
+        }else if(state is DeleteLoadedState){
+          Navigator.pop(context);
+          Navigator.of(context).pop();
+          fluttertoast(msg: "Turf permenently deleted");
         }
       },
       child: Padding(
@@ -537,7 +547,13 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                         visible: (ActionType.addTurf==widget.type)?false:true,
                         child: CustomButton(
                           text: "Delete Turf",
-                          onTap: () {},
+                          onTap: () {
+                            alertBox(context: context, onPressed: (){
+                              Navigator.pop(context);
+                              context.read<TurfManagingBloc>().add(DeleteTurfEvent(turfId: widget.turfModel!.turfId));
+                            }, title: "Delete turf", content: "Are you sure want to remove turf permenently?");
+                            
+                          },
                           width: 250,
                         ),
                       )

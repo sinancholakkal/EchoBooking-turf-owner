@@ -14,3 +14,7 @@ class UpdateTurfEvent extends TurfManagingEvent{
   final TurfModel turfModel;
   UpdateTurfEvent({required this.turfModel}); 
 }
+class DeleteTurfEvent extends TurfManagingEvent{
+  final String turfId;
+  DeleteTurfEvent({required this.turfId});
+}

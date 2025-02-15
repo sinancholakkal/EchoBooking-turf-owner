@@ -19,3 +19,7 @@ class FetchLoadedState extends TurfManagingState{
 class UpdateLoadingState extends TurfManagingState{}
 
 class UpdateLoadedState extends TurfManagingState{}
+
+class DeleteLoadingState extends TurfManagingState{}
+
+class DeleteLoadedState extends TurfManagingState{}

@@ -11,7 +11,10 @@ import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
 import 'package:echo_booking_owner/domain/repository/turf_service.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_upload_tab/turf_upload_tab_bloc.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/country_field_widget.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/drop_down_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/image_add_part_widget.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/location_fetching_part_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/text_form_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/custom_button.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/flutter_toast.dart';
@@ -53,12 +56,13 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
   final List<String> items = [
     'Football',
     "Cricket",
-    "Basketball",
+    "Others",
   ];
 
   Future<void> saveButton(BuildContext context) async {
     Position position = await LocationRepo.getingPosition();
     TurfModel turfModel = TurfModel(
+      reviewStatus: "false",
       turfId: (ActionType.addTurf == widget.type)
           ? getRandomId()
           : widget.turfModel!.turfId,
@@ -158,7 +162,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
         } else if (state is AddSuccessState) {
           Navigator.pop(context);
           fluttertoast(msg: "Turf Successfully Added");
-          
+
           print("Turf added=================================================");
         } else if (state is UpdateLoadingState) {
           print("updat Loading===========================================");
@@ -168,17 +172,19 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
           Navigator.pop(context);
           fluttertoast(msg: "Turf data updated");
           print("updated ===========================================");
-        }else if(state is DeleteLoadingState){
+        } else if (state is DeleteLoadingState) {
           print("Delete loading state==========================");
           loadingWidget(context);
-        }else if(state is DeleteLoadedState){
+        } else if (state is DeleteLoadedState) {
           Navigator.pop(context);
           Navigator.of(context).pop();
           fluttertoast(msg: "Turf permenently deleted");
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(40),
+        padding: (ActionType.editTurf == widget.type)
+            ? EdgeInsets.only(left: 40, right: 40, bottom: 40)
+            : EdgeInsets.all(40),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           width: double.maxFinite,
@@ -232,123 +238,25 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                       return Validation.priceValidate(value: value);
                     },
                   ),
-                  //State and location button====================================
-                  Row(
-                    spacing: 10,
-                    children: [
-                      ValueListenableBuilder(
-                        valueListenable: _state,
-                        builder: (context, value, child) {
-                          return TextFormWidget(
-                            controller: value,
-                            initialValue: name,
-                            readOnly: true,
-                            labelText: "State",
-                            width: 400,
-                            enableBorderColor:
-                                const Color.fromRGBO(141, 188, 227, 1),
-                            focusBorderColor:
-                                const Color.fromRGBO(141, 188, 227, 1),
-                            validator: (value) {
-                              return Validation.stateAndCountryValidate(
-                                  value: value);
-                            },
-                          );
-                        },
-                      ),
-                      //Location button--------------------
-                      SizedBox(
-                        width: 180,
-                        child: ElevatedButton.icon(
-                            icon: Icon(Icons.my_location),
-                            onPressed: () async {
-                              Position position =
-                                  await LocationRepo.getingPosition();
-                              //log(position.latitude.toString());
-                              await LocationRepo.getStreatNames(
-                                      position.latitude, position.longitude)
-                                  .then((value) {
-                                //log(value.toString());
-                                _state.value.text = value["state"]!;
-                                _country.value.text = value["country"]!;
-                                _state.notifyListeners();
-                              });
-                            },
-                            label: Text("My Location")),
-                      ),
-                    ],
-                  ),
+                  //State Field and location button====================================
+                  LocationFetchingPartWidget(state: _state, name: name, country: _country),
                   //country formField---------------------------------
-                  SizedBox(
-                    child: ValueListenableBuilder(
-                      valueListenable: _country,
-                      builder: (context, value, child) {
-                        return TextFormWidget(
-                          validator: (value) {
-                            return Validation.stateAndCountryValidate(
-                                value: value);
-                          },
-                          readOnly: true,
-                          controller: value,
-                          labelText: "Country",
-                          width: 400,
-                          enableBorderColor:
-                              const Color.fromRGBO(141, 188, 227, 1),
-                          focusBorderColor:
-                              const Color.fromRGBO(141, 188, 227, 1),
-                        );
-                      },
-                    ),
-                  ),
+                  CountryFieldWidget(country: _country),
                   //DropDown menu button for catogery-----------
-                  Row(
-                    spacing: 10,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Select catogery:",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      ValueListenableBuilder(
-                        valueListenable: initialDropDown,
-                        builder: (context, value, child) {
-                          return SizedBox(
-                            width: 290,
-                            child: DropdownButton(
-                              focusColor: Colors.white,
-                              isExpanded: true,
-                              icon: Icon(Icons.arrow_drop_down),
-                              value: value,
-                              items: items.map((String item) {
-                                return DropdownMenuItem(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: (initialDropDown.value == item)
-                                            ? kwhite
-                                            : Colors.black),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (val) {
-                                initialDropDown.value = val!;
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                  DropDownWidget(initialDropDown: initialDropDown, items: items),
                   BlocBuilder<TurfUploadTabBloc, TurfUploadTabState>(
                     builder: (context, state) {
                       if (state is SuccessState) {
                         int selectedDateIndex = state.selectIndex;
                         //log(selectedDateIndex.toString());
+
                         timeSlots = state.timeSlots;
+
                         print(timeSlots.toString());
                         List<String> dateKeys = state.timeSlots.keys.toList();
+                        if (selectedDateIndex >= dateKeys.length) {
+                          selectedDateIndex = dateKeys.isNotEmpty ? 0 : -1;
+                        }
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -542,17 +450,24 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                         },
                         width: 250,
                       ),
-                      
+
                       Visibility(
-                        visible: (ActionType.addTurf==widget.type)?false:true,
+                        visible:
+                            (ActionType.addTurf == widget.type) ? false : true,
                         child: CustomButton(
                           text: "Delete Turf",
                           onTap: () {
-                            alertBox(context: context, onPressed: (){
-                              Navigator.pop(context);
-                              context.read<TurfManagingBloc>().add(DeleteTurfEvent(turfId: widget.turfModel!.turfId));
-                            }, title: "Delete turf", content: "Are you sure want to remove turf permenently?");
-                            
+                            alertBox(
+                                context: context,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  context.read<TurfManagingBloc>().add(
+                                      DeleteTurfEvent(
+                                          turfId: widget.turfModel!.turfId));
+                                },
+                                title: "Delete turf",
+                                content:
+                                    "Are you sure want to remove turf permenently?");
                           },
                           width: 250,
                         ),
@@ -574,6 +489,9 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     return "turf_${random.nextInt(10000000)}";
   }
 }
+
+
+
 
 enum ActionType {
   addTurf,

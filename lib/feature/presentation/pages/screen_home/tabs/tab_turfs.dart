@@ -4,6 +4,8 @@ import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:echo_booking_owner/domain/models/turf_model.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_turf_upload.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/table_heading_widget.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/table_row_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_turf_update/screen_turf_update.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -39,137 +41,41 @@ class _TabTurfsState extends State<TabTurfs> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                height: 40,
-                color: Colors.blue,
-                child: Table(
-                  border: TableBorder.all(
-                    color: kblue,
-                    width: 3,
-                    //style: BorderStyle.solid,
-                  ),
-                  children: [
-                    TableRow(children: [
-                      Column(
-                        children: [
-                          TextWidget(text: "No"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Name"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Category"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Phone"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Price"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Review"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          TextWidget(text: "Action"),
-                        ],
-                      ),
-                    ]),
-                  ],
-                ),
-              ),
+              //Table heading----------------------
+              TableHeadingWidget(),
               bloc.BlocBuilder<TurfManagingBloc, TurfManagingState>(
                 builder: (context, state) {
                   if (state is FetchLoadingState) {
-                    return SizedBox();
+                    return const Center(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                          ),
+                          CircularProgressIndicator(),
+                        ],
+                      ),
+                    );
                   } else if (state is FetchLoadedState) {
+                    if (state.listTurfModel.isEmpty) {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: 300,
+                          child: Image.asset(
+                            "asset/no-data.png",
+                          ),
+                        ),
+                      );
+                    }
+                    //Table row--------------
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.listTurfModel.length,
                       itemBuilder: (context, index) {
                         TurfModel data = state.listTurfModel[index];
                         log(data.turfName);
-                        return Table(
-                          border: TableBorder.all(),
-                          children: [
-                            TableRow(children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child:
-                                            TextWidget(text: "${index + 1}"))),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child:
-                                            TextWidget(text: data.turfName))),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child:
-                                            TextWidget(text: data.catogery))),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child: TextWidget(text: data.phone))),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child: TextWidget(text: data.price))),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: TableCell(
-                                      child: Text(
-                                    "Pendig",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: TableCell(
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              Get.to(
-                                                () => ScreenTurfUpdate(
-                                                    turfModel: data),
-                                                transition:
-                                                    Transition.cupertino,
-                                                duration:
-                                                    Duration(milliseconds: 700),
-                                              );
-                                            },
-                                            child: Text("View")))),
-                              ),
-                            ])
-                          ],
-                        );
+                        return TableRowWidget(data: data,index: index,);
                       },
                     );
                   } else {
@@ -184,3 +90,4 @@ class _TabTurfsState extends State<TabTurfs> {
     );
   }
 }
+

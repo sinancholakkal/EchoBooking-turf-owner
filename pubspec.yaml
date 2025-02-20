@@ -40,7 +40,7 @@ dependencies:
   cloud_firestore: ^5.6.2
   firebase_storage: ^12.4.1
   flutter_bloc: ^9.0.0
-  easy_sidemenu: ^0.6.0
+  easy_sidemenu: ^0.6.1
   intl: ^0.20.2
   time_range_picker: ^2.3.0
   image_picker: ^1.1.2
@@ -76,6 +76,7 @@ flutter:
   assets:
     - asset/loading.gif
     - asset/beckham-david-male-males-wallpaper-preview-removebg-preview.png
+    - asset/no-data.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

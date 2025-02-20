@@ -55,6 +55,7 @@ class TurfManagingBloc extends Bloc<TurfManagingEvent, TurfManagingState> {
         await turfService.deleteTurf(event.turfId);
 
         emit(DeleteLoadedState());
+        emit(FetchLoadingState());
         List<TurfModel> listTurfModel = await turfService.fetchturfs();
         emit(FetchLoadedState(listTurfModel: listTurfModel));
       }catch(e){

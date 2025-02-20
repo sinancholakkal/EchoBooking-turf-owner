@@ -12,6 +12,7 @@ class TurfService {
   final ownerId = FirebaseAuth.instance;
   Future<void> addTurf(TurfModel turfModel) async {
     turfModel.images = await uploadImagesToCloudinary(images.value);
+    images.value.clear();
     await FirebaseFirestore.instance
         .collection("owner")
         .doc(ownerId.currentUser!.uid)
@@ -31,6 +32,7 @@ class TurfService {
       "landmark": turfModel.landmark,
       "images": turfModel.images,
       "turfid": turfModel.turfId,
+      "reviewStatus":turfModel.reviewStatus
     });
     turfModel.timeSlots.forEach((key, value) async {
       await FirebaseFirestore.instance
@@ -72,6 +74,7 @@ class TurfService {
       "landmark": turfModel.landmark,
       "images": turfModel.images,
       "turfid": turfModel.turfId,
+      "reviewStatus":turfModel.reviewStatus
     });
 
     // Update time slots
@@ -132,6 +135,7 @@ class TurfService {
       log(timeSlotsMap.toString());
 
       TurfModel turfModel = TurfModel(
+        reviewStatus: turfData['reviewStatus'],
         turfId: turfData['turfid'],
         turfName: turfData['turfname'],
         phone: turfData['phone'],

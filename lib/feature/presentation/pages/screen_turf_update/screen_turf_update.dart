@@ -1,3 +1,4 @@
+import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:echo_booking_owner/domain/models/turf_model.dart';
 import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
@@ -24,6 +25,10 @@ class _ScreenTurfUpdateState extends State<ScreenTurfUpdate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: kwhite),
+      ),
       backgroundColor: Colors.black,
       body: TabTurfUpload(type: ActionType.editTurf,turfModel: widget.turfModel,),
     );

@@ -6,6 +6,7 @@ import 'package:echo_booking_owner/feature/presentation/widgets/flutter_toast.da
 import 'package:echo_booking_owner/feature/presentation/widgets/showDiolog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 
 //ValueNotifier<List<Uint8List>> images = ValueNotifier([]);
 ValueNotifier<List<dynamic>> images = ValueNotifier([]);
@@ -38,12 +39,16 @@ class ImageAddingPart extends StatelessWidget {
                 children: [
                   InkWell(
                     onLongPress: () {
-                      alertBox(context: context, onPressed: (){
-                        images.value.removeLast();
-                        images.notifyListeners();
-                        Navigator.pop(context);
-                        fluttertoast(msg: "Image removed");
-                      }, title: "Remove", content: "Are you sure want to remove this image?");
+                      alertBox(
+                          context: context,
+                          onPressed: () {
+                            images.value.removeLast();
+                            images.notifyListeners();
+                            Navigator.pop(context);
+                            fluttertoast(msg: "Image removed");
+                          },
+                          title: "Remove",
+                          content: "Are you sure want to remove this image?");
                     },
                     child: Container(
                       width: 200,
@@ -57,13 +62,24 @@ class ImageAddingPart extends StatelessWidget {
                           ? ClipRRect(
                               borderRadius: radius,
                               child: (value.last is String)
-                                  ? Image.network(value.last,fit: BoxFit.cover,)
-                                  : Image.memory(value.last,fit: BoxFit.cover,)
-                              // child: Image.memory(
-                              //   value.last,
-                              //   fit: BoxFit.cover,
-                              // ),
-                              )
+                                  ? InstaImageViewer(
+                                    child: Image(
+                                       fit: BoxFit.cover,
+                                        image: Image.network(
+                                          value.last,
+                                         
+                                        ).image,
+                                      ),
+                                  )
+                                  : InstaImageViewer(
+                                    child: Image(
+                                      fit: BoxFit.cover,
+                                      image: Image.memory(
+                                          value.last,
+                                          
+                                        ).image,
+                                    ),
+                                  ))
                           : null,
                     ),
                   ),
@@ -87,13 +103,18 @@ class ImageAddingPart extends StatelessWidget {
                       children: List.generate(value.length, (index) {
                         return InkWell(
                           onLongPress: () {
-                      alertBox(context: context, onPressed: (){
-                        images.value.removeAt(index);
-                        images.notifyListeners();
-                        Navigator.pop(context);
-                        fluttertoast(msg: "Image removed");
-                      }, title: "Remove", content: "Are you sure want to remove this image?");
-                    },
+                            alertBox(
+                                context: context,
+                                onPressed: () {
+                                  images.value.removeAt(index);
+                                  images.notifyListeners();
+                                  Navigator.pop(context);
+                                  fluttertoast(msg: "Image removed");
+                                },
+                                title: "Remove",
+                                content:
+                                    "Are you sure want to remove this image?");
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -107,15 +128,25 @@ class ImageAddingPart extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: radius,
                               child: (value[index] is String)
-                                  ? Image.network(
-                                      value[index],
+                                  ? InstaImageViewer(
+                                    child: Image(
                                       fit: BoxFit.cover,
-                                    )
-                                  : Image.memory(value[index],fit: BoxFit.cover,),
-                              // child: Image.memory(
-                              //   value[index],
-                              //   fit: BoxFit.cover,
-                              // ),
+                                      image: Image.network(
+                                          value[index],
+                                          
+                                        ).image,
+                                    ),
+                                  )
+                                  : InstaImageViewer(
+                                    
+                                    child: Image(
+                                      fit: BoxFit.cover,
+                                      image: Image.memory(
+                                          value[index],
+                                          
+                                        ).image,
+                                    ),
+                                  ),
                             ),
                           ),
                         );

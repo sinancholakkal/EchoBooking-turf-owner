@@ -7,7 +7,8 @@ class AddDateInitialEvent extends TurfUploadTabEvent{}
 
 class AddDateEvent extends TurfUploadTabEvent{
  final int index;
- AddDateEvent({required this.index});
+ final BuildContext context;
+ AddDateEvent({required this.index,required this.context});
 }
 
 class AddTimeSlotEvent extends TurfUploadTabEvent{

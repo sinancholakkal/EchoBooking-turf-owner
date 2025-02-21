@@ -32,7 +32,7 @@ class TurfService {
       "landmark": turfModel.landmark,
       "images": turfModel.images,
       "turfid": turfModel.turfId,
-      "reviewStatus":turfModel.reviewStatus
+      "reviewStatus": turfModel.reviewStatus
     });
     turfModel.timeSlots.forEach((key, value) async {
       await FirebaseFirestore.instance
@@ -74,7 +74,7 @@ class TurfService {
       "landmark": turfModel.landmark,
       "images": turfModel.images,
       "turfid": turfModel.turfId,
-      "reviewStatus":turfModel.reviewStatus
+      "reviewStatus": turfModel.reviewStatus
     });
 
     // Update time slots
@@ -86,23 +86,19 @@ class TurfService {
     await batch.commit();
   }
 
-
   Future<List<TurfModel>> fetchturfs() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+    final snapshotRef =  FirebaseFirestore
         .instance
         .collection("owner")
         .doc(ownerId.currentUser!.uid)
-        .collection("turfs")
-        .get();
+        .collection("turfs");
+        QuerySnapshot<Map<String, dynamic>> snapshot = await snapshotRef.get();
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = snapshot.docs;
     List<TurfModel> listTurfModel = [];
     for (var doc in docs) {
       Map<String, dynamic> turfData = doc.data();
       QuerySnapshot<Map<String, dynamic>> timeSlotsSnapshot =
-          await FirebaseFirestore.instance
-              .collection("owner")
-              .doc(ownerId.currentUser!.uid)
-              .collection("turfs")
+          await snapshotRef
               .doc(turfData["turfid"])
               .collection('timeSlotes')
               .get();
@@ -112,23 +108,37 @@ class TurfService {
 
       for (var timeSlot in timeSlotes) {
         String dateKey = timeSlot.id;
-        Map<String, dynamic> timeData = timeSlot.data();
+        int date = int.parse(dateKey.split("-")[2]);
+        int todayDay = DateTime.now().day;
+        if (date >= todayDay) {
+          //Adding time slotes---------
+          log(date.toString());
+          log("=======================");
+          Map<String, dynamic> timeData = timeSlot.data();
 
-        if (!timeSlotsMap.containsKey(dateKey)) {
-          timeSlotsMap[dateKey] = [];
-        }
-
-        if (timeData.containsKey("time_slot") &&
-            timeData["time_slot"] is List) {
-          List<dynamic> timeSlotList = timeData["time_slot"];
-
-          for (var slot in timeSlotList) {
-            if (slot is Map<String, dynamic>) {
-              timeSlotsMap[dateKey]?.add(slot);
-            }
+          if (!timeSlotsMap.containsKey(dateKey)) {
+            timeSlotsMap[dateKey] = [];
           }
-        } else {
-          timeSlotsMap[dateKey]?.add(timeData);
+
+          if (timeData.containsKey("time_slot") &&
+              timeData["time_slot"] is List) {
+            List<dynamic> timeSlotList = timeData["time_slot"];
+
+            for (var slot in timeSlotList) {
+              if (slot is Map<String, dynamic>) {
+                timeSlotsMap[dateKey]?.add(slot);
+              }
+            }
+          } else {
+            timeSlotsMap[dateKey]?.add(timeData);
+          }
+        }else{
+          //Removing old date and time--------------
+          await snapshotRef.doc(turfData["turfid"])
+          .collection("timeSlotes")
+          .doc(dateKey).delete();
+          log("$date Deleted=================");
+          
         }
       }
 
@@ -157,18 +167,18 @@ class TurfService {
     }
     return listTurfModel;
   }
-  Future<void>deleteTurf(String turfId)async{
-     final firestore = FirebaseFirestore.instance;
+
+  Future<void> deleteTurf(String turfId) async {
+    final firestore = FirebaseFirestore.instance;
     final ownerDoc =
         firestore.collection("owner").doc(ownerId.currentUser!.uid);
     final turfDoc = ownerDoc.collection("turfs").doc(turfId);
 
     final dateDocs = await turfDoc.collection("timeSlotes").get();
-    for(var doc in dateDocs.docs){
+    for (var doc in dateDocs.docs) {
       await doc.reference.delete();
     }
-     await turfDoc.delete();
-    
+    await turfDoc.delete();
   }
 
   Future<List<String>> uploadImagesToCloudinary(List<dynamic> images) async {

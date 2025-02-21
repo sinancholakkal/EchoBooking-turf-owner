@@ -11,6 +11,7 @@ import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
 import 'package:echo_booking_owner/domain/repository/turf_service.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_upload_tab/turf_upload_tab_bloc.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/screen_home.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/country_field_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/drop_down_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/image_add_part_widget.dart';
@@ -50,7 +51,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
   late TextEditingController _landmark;
   late ValueNotifier<TextEditingController> _state;
   late ValueNotifier<TextEditingController> _country;
-  late Map<String, List<Map<String, dynamic>>> timeSlots;
+   Map<String, List<Map<String, dynamic>>> timeSlots ={};
   String? name;
 
   final List<String> items = [
@@ -60,9 +61,10 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
   ];
 
   Future<void> saveButton(BuildContext context) async {
+    print("Save function called-=============================");
     Position position = await LocationRepo.getingPosition();
     TurfModel turfModel = TurfModel(
-      reviewStatus: "false",
+      reviewStatus: (ActionType.addTurf ==widget.type)?"false":(widget.turfModel!.reviewStatus.startsWith("rejected"))?"false":"true",
       turfId: (ActionType.addTurf == widget.type)
           ? getRandomId()
           : widget.turfModel!.turfId,
@@ -97,7 +99,8 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     if (ActionType.addTurf == widget.type) {
       context.read<TurfUploadTabBloc>().add(ResetStateEvent());
       context.read<TurfUploadTabBloc>().add(AddDateInitialEvent());
-    } else {
+    }
+     else {
       images.value.addAll(widget.turfModel!.images ?? []);
       print(images.value);
       print("=============================");
@@ -162,6 +165,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
         } else if (state is AddSuccessState) {
           Navigator.pop(context);
           fluttertoast(msg: "Turf Successfully Added");
+          Get.offAll(()=>ScreenHome());
 
           print("Turf added=================================================");
         } else if (state is UpdateLoadingState) {
@@ -239,156 +243,195 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                     },
                   ),
                   //State Field and location button====================================
-                  LocationFetchingPartWidget(state: _state, name: name, country: _country),
+                  LocationFetchingPartWidget(
+                      state: _state, name: name, country: _country),
                   //country formField---------------------------------
                   CountryFieldWidget(country: _country),
                   //DropDown menu button for catogery-----------
-                  DropDownWidget(initialDropDown: initialDropDown, items: items),
+                  DropDownWidget(
+                      initialDropDown: initialDropDown, items: items),
+
+
                   BlocBuilder<TurfUploadTabBloc, TurfUploadTabState>(
                     builder: (context, state) {
                       if (state is SuccessState) {
-                        int selectedDateIndex = state.selectIndex;
-                        //log(selectedDateIndex.toString());
-
-                        timeSlots = state.timeSlots;
-
-                        print(timeSlots.toString());
                         List<String> dateKeys = state.timeSlots.keys.toList();
+                        timeSlots = state.timeSlots;
+                        int selectedDateIndex = state.selectIndex;
+
+                        // Ensure selectedDateIndex is valid
                         if (selectedDateIndex >= dateKeys.length) {
                           selectedDateIndex = dateKeys.isNotEmpty ? 0 : -1;
                         }
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            //Add date Button and displaying dates-------------------------
-                            SizedBox(
-                              height: 70,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: dateKeys.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == dateKeys.length) {
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          context.read<TurfUploadTabBloc>().add(
-                                              AddDateEvent(
-                                                  index: selectedDateIndex));
-                                        },
-                                        child: Text("Add Date"),
-                                      ),
-                                    );
-                                  }
 
-                                  return GestureDetector(
-                                    onTap: () {
-                                      context.read<TurfUploadTabBloc>().add(
-                                          DateSelectIdxEvent(
-                                              selectIndex: index));
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.all(5),
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: selectedDateIndex == index
-                                            ? Colors.blue.withOpacity(0.2)
-                                            : Colors.transparent,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            DateFormat('dd MMM').format(
-                                                DateFormat('yyyy-MM-dd')
-                                                    .parse(dateKeys[index])),
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
+                        return Column(
+                          children: [
+                            // Show "Add Date" button if no dates exist
+                            if (dateKeys.isEmpty)
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    context
+                                        .read<TurfUploadTabBloc>()
+                                        .add(AddDateEvent(index: 0,context: context));
+                                  },
+                                  child: Text("Add Date"),
+                                ),
+                              )
+                            else
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: 70,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: dateKeys.length + 1,
+                                      itemBuilder: (context, index) {
+                                        if (index == dateKeys.length) {
+                                          return Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<TurfUploadTabBloc>()
+                                                    .add(AddDateEvent(
+                                                        index:
+                                                            selectedDateIndex,context: context));
+                                              },
+                                              child: Text("Add Date"),
+                                            ),
+                                          );
+                                        }
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<TurfUploadTabBloc>()
+                                                .add(DateSelectIdxEvent(
+                                                    selectIndex: index));
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.all(5),
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
                                               color: selectedDateIndex == index
-                                                  ? Colors.blue
-                                                  : kwhite,
+                                                  ? Colors.blue.withOpacity(0.2)
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  DateFormat('dd MMM').format(
+                                                      DateFormat('yyyy-MM-dd')
+                                                          .parse(
+                                                              dateKeys[index])),
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: selectedDateIndex ==
+                                                            index
+                                                        ? Colors.blue
+                                                        : Colors.white,
+                                                  ),
+                                                ),
+                                                if (selectedDateIndex == index)
+                                                  Container(
+                                                    margin:
+                                                        EdgeInsets.only(top: 4),
+                                                    height: 4,
+                                                    width: 20,
+                                                    color: Colors.blue,
+                                                  ),
+                                              ],
                                             ),
                                           ),
-                                          if (selectedDateIndex == index)
-                                            Container(
-                                              margin: EdgeInsets.only(top: 4),
-                                              height: 4,
-                                              width: 20,
-                                              color: Colors.blue,
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                children: [
-                                  //Time slot add button--------------------
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      context.read<TurfUploadTabBloc>().add(
-                                          AddTimeSlotEvent(
-                                              selectedKey:
-                                                  dateKeys[selectedDateIndex],
-                                              context: context,
-                                              index: selectedDateIndex));
-                                    },
-                                    child: Text("Add Time Slot"),
-                                  ),
-                                  height10,
-                                  //time slots displaying------------------
-                                  SizedBox(
-                                    width: 500,
-                                    child: GridView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 8,
-                                        mainAxisSpacing: 8,
-                                        childAspectRatio: 4,
-                                      ),
-                                      itemCount: state
-                                              .timeSlots[
-                                                  dateKeys[selectedDateIndex]]
-                                              ?.length ??
-                                          0,
-                                      itemBuilder: (context, index) {
-                                        var slot = state.timeSlots[dateKeys[
-                                            selectedDateIndex]]![index];
-                                        return ElevatedButton(
-                                            onPressed: () {},
-                                            onLongPress: () {
-                                              alertBox(
-                                                  content:
-                                                      "Are you sure want to remove time slot?",
-                                                  title: "Remove",
-                                                  context: context,
-                                                  onPressed: () {
-                                                    context
-                                                        .read<
-                                                            TurfUploadTabBloc>()
-                                                        .add(RemoveTimeSlotEvent(
-                                                            selectedKey: dateKeys[
-                                                                selectedDateIndex],
-                                                            index: index));
-                                                    Get.back();
-                                                  });
-                                            },
-                                            child: Text(slot["time"]));
+                                        );
                                       },
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            context
+                                                .read<TurfUploadTabBloc>()
+                                                .add(AddTimeSlotEvent(
+                                                    selectedKey: dateKeys[
+                                                        selectedDateIndex],
+                                                    context: context,
+                                                    index: selectedDateIndex));
+                                          },
+                                          child: Text("Add Time Slot"),
+                                        ),
+                                        SizedBox(height: 10),
+                                        // Show time slots if available
+                                        if (dateKeys.isNotEmpty &&
+                                            state.timeSlots[dateKeys[
+                                                    selectedDateIndex]] !=
+                                                null &&
+                                            state
+                                                .timeSlots[dateKeys[
+                                                    selectedDateIndex]]!
+                                                .isNotEmpty)
+                                          SizedBox(
+                                            width: 500,
+                                            child: GridView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                crossAxisSpacing: 8,
+                                                mainAxisSpacing: 8,
+                                                childAspectRatio: 4,
+                                              ),
+                                              itemCount: state
+                                                  .timeSlots[dateKeys[
+                                                      selectedDateIndex]]!
+                                                  .length,
+                                              itemBuilder: (context, index) {
+                                                var slot = state.timeSlots[
+                                                        dateKeys[
+                                                            selectedDateIndex]]![
+                                                    index];
+                                                return ElevatedButton(
+                                                    onPressed: () {},
+                                                    onLongPress: () {
+                                                      alertBox(
+                                                          content:
+                                                              "Are you sure want to remove time slot?",
+                                                          title: "Remove",
+                                                          context: context,
+                                                          onPressed: () {
+                                                            context
+                                                                .read<
+                                                                    TurfUploadTabBloc>()
+                                                                .add(RemoveTimeSlotEvent(
+                                                                    selectedKey:
+                                                                        dateKeys[
+                                                                            selectedDateIndex],
+                                                                    index:
+                                                                        index));
+                                                            Get.back();
+                                                          });
+                                                    },
+                                                    child: Text(slot["time"]));
+                                              },
+                                            ),
+                                          )
+                                        
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            )
                           ],
                         );
                       } else {
@@ -489,9 +532,6 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
     return "turf_${random.nextInt(10000000)}";
   }
 }
-
-
-
 
 enum ActionType {
   addTurf,

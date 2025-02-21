@@ -49,6 +49,7 @@ dependencies:
   nominatim_geocoding: ^0.0.6
   dio: ^5.8.0+1
   fluttertoast: ^8.2.12
+  insta_image_viewer: ^1.0.4
 
 dev_dependencies:
   flutter_test:

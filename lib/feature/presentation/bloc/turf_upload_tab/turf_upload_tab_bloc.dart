@@ -22,7 +22,7 @@ class TurfUploadTabBloc extends Bloc<TurfUploadTabEvent, TurfUploadTabState> {
 
     on<AddDateEvent>((event, emit) async {
       Map<String, List<Map<String, dynamic>>> timeSlots =
-          timeSlotesServises.addDate();
+          await timeSlotesServises.addDate(event.context);
       emit(SuccessState(timeSlots: timeSlots, selectIndex: event.index));
     });
     on<AddTimeSlotEvent>((event, emit) async {
@@ -49,7 +49,6 @@ class TurfUploadTabBloc extends Bloc<TurfUploadTabEvent, TurfUploadTabState> {
     });
     on<ImagePickerEvent>(
       (event, emit) async {
-        //emit(DateSelectedState(selectIndex: event.selectIndex));
         ImagePicker imagePicker = ImagePicker();
         final imagePicked =
             await imagePicker.pickImage(source: ImageSource.gallery);
@@ -58,8 +57,6 @@ class TurfUploadTabBloc extends Bloc<TurfUploadTabEvent, TurfUploadTabState> {
            log(timeSlotesServises.timeSlots.toString());
           emit(ImagePickerSuccessState(image: bytes));
           emit(SuccessState(timeSlots: timeSlotesServises.timeSlots, selectIndex: 0));
-         // log(timeSlotesServises.timeSlots.toString());
-          //emit(SuccessState(timeSlots: timeSlotesServises.timeSlots, selectIndex: 0));
         }
       },
     );

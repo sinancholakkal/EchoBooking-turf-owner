@@ -12,18 +12,29 @@ class TimeSlotesServises {
     return timeSlots;
   }
 
-  Map<String, List<Map<String, dynamic>>> addDate() {
+  Future<Map<String, List<Map<String, dynamic>>>> addDate(
+      BuildContext content) async {
     List<String> dateKeys = timeSlots.keys.toList();
-    DateTime lastDate = dateKeys.isNotEmpty
-        ? DateFormat("yyyy-mm-dd").parse(dateKeys.last)
-        : DateTime.now();
-    DateTime newDate = lastDate.add(Duration(days: 1));
-    String newDateKey = DateFormat("yyyy-mm-dd").format(newDate);
+    DateTime? _picked = await showDatePicker(
+      context: content,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year, DateTime.now().month, 1),
+      lastDate: DateTime(2100),
+    );
+    if(_picked !=null){
+      String newDateKey =DateFormat("yyyy-mm-dd").format(_picked);
+    // DateTime lastDate = dateKeys.isNotEmpty
+    //     ? DateFormat("yyyy-mm-dd").parse(dateKeys.last)
+    //     : DateTime.now();
+    // DateTime newDate = lastDate.add(Duration(days: 1));
+    // String newDateKey = DateFormat("yyyy-mm-dd").format(newDate);
     timeSlots[newDateKey] = [];
+    }
     return timeSlots;
   }
 
-  Future<Map<String, List<Map<String, dynamic>>>> addTimeSlot(String selectedKey,BuildContext context) async {
+  Future<Map<String, List<Map<String, dynamic>>>> addTimeSlot(
+      String selectedKey, BuildContext context) async {
     TimeRange? result = await showTimeRangePicker(context: context);
     if (result != null) {
       String startTime = result.startTime.toString();
@@ -43,7 +54,8 @@ class TimeSlotesServises {
     return timeSlots;
   }
 
-  Map<String, List<Map<String, dynamic>>> removeTimeSlot(String selectedKey, int index){
+  Map<String, List<Map<String, dynamic>>> removeTimeSlot(
+      String selectedKey, int index) {
     timeSlots[selectedKey]!.removeAt(index);
     return timeSlots;
   }

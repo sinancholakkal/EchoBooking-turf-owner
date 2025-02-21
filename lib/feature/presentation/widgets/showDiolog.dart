@@ -31,6 +31,7 @@ Future<dynamic> showDiolog({
     required Function() onPressed,
         required String title,
     required String content,
+    String? type,
   }) {
     return showDialog(
       context: context,
@@ -39,11 +40,11 @@ Future<dynamic> showDiolog({
           title: Text(title),
           content: Text(content),
           actions: [
-            TextButton(
+           type==null? TextButton(
                 onPressed: () {
                   Get.back();
                 },
-                child: Text("cancel")),
+                child: Text("cancel")):
             TextButton(onPressed: onPressed, child: Text("Ok"))
           ],
         );

@@ -1,4 +1,5 @@
-import 'dart:math';
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,12 +23,8 @@ class TimeSlotesServises {
       lastDate: DateTime(2100),
     );
     if(_picked !=null){
-      String newDateKey =DateFormat("yyyy-mm-dd").format(_picked);
-    // DateTime lastDate = dateKeys.isNotEmpty
-    //     ? DateFormat("yyyy-mm-dd").parse(dateKeys.last)
-    //     : DateTime.now();
-    // DateTime newDate = lastDate.add(Duration(days: 1));
-    // String newDateKey = DateFormat("yyyy-mm-dd").format(newDate);
+      String newDateKey =DateFormat("yyyy-MM-dd").format(_picked);
+      log(newDateKey);
     timeSlots[newDateKey] = [];
     }
     return timeSlots;

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class TableRowWidget extends StatelessWidget {
   TableRowWidget({super.key, required this.data, required this.index});
 
-  final TurfModel data;
+  final dynamic data;
   int index;
 
   @override

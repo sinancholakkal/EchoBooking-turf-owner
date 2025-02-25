@@ -3,10 +3,11 @@ import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart
 import 'package:flutter/material.dart';
 
 class TableHeadingWidget extends StatelessWidget {
-  const TableHeadingWidget({
+  TableHeadingWidget({
     super.key,
+    required this.headigs,
   });
-
+  List<String> headigs;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,46 +21,54 @@ class TableHeadingWidget extends StatelessWidget {
           //style: BorderStyle.solid,
         ),
         children: [
-          TableRow(children: [
-            Column(
-              children: [
-                TextWidget(text: "No"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Name"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Category"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Phone"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Price"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Review"),
-              ],
-            ),
-            Column(
-              children: [
-                TextWidget(text: "Action"),
-              ],
-            ),
-          ]),
+          TableRow(
+            children: List.generate(headigs.length, (index){
+              return Column(
+                children: [
+                  TextWidget(text: headigs[index]),
+                ],
+              );
+            })
+            // children: [
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "No"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Name"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Category"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Phone"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Price"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Review"),
+            //     ],
+            //   ),
+            //   Column(
+            //     children: [
+            //       TextWidget(text: "Action"),
+            //     ],
+            //   ),
+            // ],
+          ),
         ],
       ),
     );
   }
 }
-

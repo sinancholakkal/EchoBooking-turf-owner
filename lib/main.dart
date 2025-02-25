@@ -1,4 +1,5 @@
 import 'package:echo_booking_owner/feature/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:echo_booking_owner/feature/presentation/bloc/bookings_bloc/bookigs_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_upload_tab/turf_upload_tab_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_login/screen_login.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => TurfManagingBloc(),
+        ),
+        BlocProvider(
+          create: (context) => BookigsBloc(),
         ),
       ],
       child: GetMaterialApp(

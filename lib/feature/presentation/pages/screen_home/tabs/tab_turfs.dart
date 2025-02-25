@@ -20,6 +20,7 @@ class TabTurfs extends StatefulWidget {
 }
 
 class _TabTurfsState extends State<TabTurfs> {
+  List<String>headigs =["No","Name","Category","Phone","Price","Review","Action"];
   @override
   void initState() {
     context.read<TurfManagingBloc>().add(FetchTurfsEvent());
@@ -42,7 +43,7 @@ class _TabTurfsState extends State<TabTurfs> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Table heading----------------------
-              TableHeadingWidget(),
+              TableHeadingWidget(headigs: headigs,),
               bloc.BlocBuilder<TurfManagingBloc, TurfManagingState>(
                 builder: (context, state) {
                   if (state is FetchLoadingState) {

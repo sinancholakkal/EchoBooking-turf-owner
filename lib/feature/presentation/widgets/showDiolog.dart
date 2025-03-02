@@ -44,7 +44,7 @@ Future<dynamic> showDiolog({
                 onPressed: () {
                   Get.back();
                 },
-                child: Text("cancel")):
+                child: Text("cancel")):SizedBox(),
             TextButton(onPressed: onPressed, child: Text("Ok"))
           ],
         );

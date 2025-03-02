@@ -36,7 +36,7 @@ class _TabTurfsState extends State<TabTurfs> {
         height: double.maxFinite,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: const Color.fromARGB(255, 23, 24, 51),
+          color: tabBackgroundColor,
         ),
         child: SingleChildScrollView(
           child: Column(

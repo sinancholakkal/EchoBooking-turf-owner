@@ -54,10 +54,16 @@ class TableRowWidget extends StatelessWidget {
               child: TableCell(
                   child: data.reviewStatus.startsWith("rejected")
                       ? ElevatedButton.icon(
-                        icon: Icon(Icons.remove_red_eye),
+                          icon: Icon(Icons.remove_red_eye),
                           onPressed: () {
-                            alertBox(type: "hide cancel",context: context, onPressed: ()=>Navigator.of(context).pop(), title: "Status", content: data.reviewStatus.split("*")[1]);
-                          }, label: Text("Rejected"))
+                            alertBox(
+                                type: "hide cancel",
+                                context: context,
+                                onPressed: () => Navigator.of(context).pop(),
+                                title: "Status",
+                                content: data.reviewStatus.split("*")[1]);
+                          },
+                          label: Text("Rejected"))
                       : Text(
                           (data.reviewStatus == "true") ? "Live" : "Pending",
                           style: TextStyle(

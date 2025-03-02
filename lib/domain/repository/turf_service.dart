@@ -47,19 +47,12 @@ class TurfService {
   }
 
   Future<void> updateTurf(TurfModel turfModel) async {
-    // Upload images first
     turfModel.images = await uploadImagesToCloudinary(images.value);
-
-    // Reference Firestore
     final firestore = FirebaseFirestore.instance;
     final ownerDoc =
         firestore.collection("owner").doc(ownerId.currentUser!.uid);
     final turfDoc = ownerDoc.collection("turfs").doc(turfModel.turfId);
-
-    // Use batch write for efficiency
     WriteBatch batch = firestore.batch();
-
-    // Update turf details
     batch.update(turfDoc, {
       "turfname": turfModel.turfName,
       "phone": turfModel.phone,
@@ -76,8 +69,6 @@ class TurfService {
       "turfid": turfModel.turfId,
       "reviewStatus": turfModel.reviewStatus
     });
-
-    // Update time slots
     turfModel.timeSlots.forEach((key, value) {
       DocumentReference timeSlotDoc = turfDoc.collection("timeSlotes").doc(key);
       batch.set(timeSlotDoc, {"time_slot": value});
@@ -109,12 +100,15 @@ class TurfService {
       for (var timeSlot in timeSlotes) {
         String dateKey = timeSlot.id;
         int date = int.parse(dateKey.split("-")[2]);
+        int month = int.parse(dateKey.split("-")[1]);
         int todayDay = DateTime.now().day;
-        if (date >= todayDay) {
+        int todayMonth = DateTime.now().month;
+        if (date >= todayDay ) {
           //Adding time slotes---------
           log(date.toString());
           log("=======================");
-          Map<String, dynamic> timeData = timeSlot.data();
+          if(month>=todayMonth){
+            Map<String, dynamic> timeData = timeSlot.data();
 
           if (!timeSlotsMap.containsKey(dateKey)) {
             timeSlotsMap[dateKey] = [];
@@ -131,6 +125,13 @@ class TurfService {
             }
           } else {
             timeSlotsMap[dateKey]?.add(timeData);
+          }
+          }else{
+            //Removing old date and time--------------
+          await snapshotRef.doc(turfData["turfid"])
+          .collection("timeSlotes")
+          .doc(dateKey).delete();
+          log("$date Deleted=================");
           }
         }else{
           //Removing old date and time--------------
@@ -163,7 +164,11 @@ class TurfService {
       );
       // log(turfData["images"].runtimeType.toString());
       // log("========================");
-      listTurfModel.add(turfModel);
+      if(turfModel.reviewStatus=="false"){
+        listTurfModel.insert(0,turfModel);
+      }else{
+        listTurfModel.add(turfModel);
+      }
     }
     return listTurfModel;
   }
@@ -218,15 +223,3 @@ class TurfService {
     return uploadedUrls;
   }
 }
-
-// "turfname":turfModel.turfName,
-//       "phone":turfModel.phone,
-//       "email":turfModel.email,
-//       "price":turfModel.price,
-//       "state":turfModel.state,
-//       "country":turfModel.country,
-//       "latitude":turfModel.latitude,
-//       "longitude":turfModel.longitude,
-//       "catogery":turfModel.catogery,
-//       "includes":turfModel.includes,
-//       "landmark":turfModel.landmark,

@@ -7,19 +7,21 @@ import 'package:flutter/material.dart';
 class TextWidget extends StatelessWidget {
   final String text;
   final Color? color;
+  final double? size;
   final FontWeight? fontWeight;
   TextWidget({
     super.key,
     required this.text,
     this.color = kwhite,
     this.fontWeight = FontWeight.bold,
+    this.size
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      style: TextStyle(color: color, fontWeight: fontWeight,fontSize: size),
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -195,7 +194,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
           height: double.maxFinite,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: const Color.fromARGB(255, 23, 24, 51),
+            color: tabBackgroundColor,
           ),
           child: SingleChildScrollView(
             child: Form(

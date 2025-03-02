@@ -29,43 +29,6 @@ class TableHeadingWidget extends StatelessWidget {
                 ],
               );
             })
-            // children: [
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "No"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Name"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Category"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Phone"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Price"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Review"),
-            //     ],
-            //   ),
-            //   Column(
-            //     children: [
-            //       TextWidget(text: "Action"),
-            //     ],
-            //   ),
-            // ],
           ),
         ],
       ),

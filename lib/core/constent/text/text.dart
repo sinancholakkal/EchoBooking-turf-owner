@@ -9,3 +9,13 @@ const textSignUpButton = "Sign up";
 const conformPassword = "Conform password";
 const textName = "Name";
 const textPhone = "Phone";
+List<String> headigsOfbookigs = [
+    'No',
+    'User name',
+    'User ph',
+    'Turf name',
+    'Booked Date',
+    'Time and Date',
+    'Amount',
+    'Payment Id'
+  ];

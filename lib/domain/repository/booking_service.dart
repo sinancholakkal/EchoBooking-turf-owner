@@ -14,9 +14,10 @@ class BookingService {
     for (var turf in snapshot.docs) {
       final data = turf.data();
       final BookingTurfmodel bookingTurfmodel = BookingTurfmodel(
+        slotDate: data['slotdate']??"Unknown",
         price: data['price'],
         paymentId: data['paymentid'],
-        bookingDate: data['bookingtime'],
+        bookingDate: data['bookingdate']??"Unknown",
         userName: data['username'],
         bookingTime: data['bookingtime'],
         catogery: data['catogery'],

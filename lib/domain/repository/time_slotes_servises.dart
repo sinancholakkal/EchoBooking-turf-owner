@@ -32,7 +32,7 @@ class TimeSlotesServises {
 
   Future<Map<String, List<Map<String, dynamic>>>> addTimeSlot(
       String selectedKey, BuildContext context) async {
-    TimeRange? result = await showTimeRangePicker(context: context);
+    TimeRange? result = await showTimeRangePicker(context: context,minDuration: Duration(hours: 1),maxDuration: Duration(hours: 1));
     if (result != null) {
       String startTime = result.startTime.toString();
       String endTime = result.endTime.toString();

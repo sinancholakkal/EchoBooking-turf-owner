@@ -5,10 +5,11 @@ import 'package:echo_booking_owner/domain/repository/auth_service.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/profile.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_booking/tab_bookings.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/tab_dashboard.dart';
-import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_turf_upload.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_turf_upload/tab_turf_upload.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_turfs.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_login/screen_login.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/heading_text.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/showDiolog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,7 +32,6 @@ class _ScreenHomeState extends State<ScreenHome> {
       sideMenuItem(title: "Turfs", icon: Icons.sports_football),
       sideMenuItem(title: "Bookings", icon: Icons.book),
       sideMenuItem(title: "Turf upload", icon: Icons.upload_file),
-      sideMenuItem(title: "Profile", icon: Icons.account_circle),
     ];
     sideMenu.addListener((index) {
       pageController.jumpToPage(index);
@@ -54,11 +54,12 @@ class _ScreenHomeState extends State<ScreenHome> {
       backgroundColor: backGroundColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          AuthService().signOut();
+          alertBox(context: context, onPressed: (){
+             AuthService().signOut();
           Get.offAll(
             () => ScreenLogin(),
-            //transition: Transition.cupertino,
           );
+          }, title: "Logout", content: "Are you sure want to logout your account?");
         },
         child: Icon(Icons.logout),
       ),
@@ -99,8 +100,7 @@ class _ScreenHomeState extends State<ScreenHome> {
               TabDashboard(),
               TabTurfs(),
               TabBookings(),
-              TabTurfUpload(type: ActionType.addTurf,),
-              TabProfile()
+              TabTurfUpload(type: ActionType.addTurf,)
             ],
           ))
         ],

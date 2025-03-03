@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:echo_booking_owner/core/constent/size/size.dart';
 import 'package:echo_booking_owner/core/theme/colors.dart';
@@ -7,7 +6,6 @@ import 'package:echo_booking_owner/core/until/validation.dart';
 import 'package:echo_booking_owner/domain/models/turf_model.dart';
 import 'package:echo_booking_owner/domain/repository/location_service.dart';
 import 'package:echo_booking_owner/domain/repository/time_slotes_servises.dart';
-import 'package:echo_booking_owner/domain/repository/turf_service.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_upload_tab/turf_upload_tab_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/screen_home.dart';
@@ -26,9 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:time_range_picker/time_range_picker.dart';
 
 class TabTurfUpload extends StatefulWidget {
   final ActionType type;

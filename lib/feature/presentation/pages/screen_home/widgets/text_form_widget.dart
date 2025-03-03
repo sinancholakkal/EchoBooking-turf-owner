@@ -13,7 +13,7 @@ class TextFormWidget extends StatelessWidget {
   final String? initialValue;
   final Color enableBorderColor;
   final Color focusBorderColor;
-  TextFormWidget({
+  const TextFormWidget({
     super.key,
     this.labelText = "",
     this.textInputType = TextInputType.text,

@@ -19,3 +19,10 @@ List<String> headigsOfbookigs = [
     'Amount',
     'Payment Id'
   ];
+  List<String> dashBoardCardText = [
+    'Total Bookings',
+    'Last year Bookings',
+    'Last Month Bookings',
+    'Last Week Bookings',
+    'Today Bookings',
+  ];

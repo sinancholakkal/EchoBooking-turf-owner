@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScreenTurfUpdate extends StatefulWidget {
   final TurfModel turfModel;
-   ScreenTurfUpdate({super.key,required this.turfModel});
+   const ScreenTurfUpdate({super.key,required this.turfModel});
 
   @override
   State<ScreenTurfUpdate> createState() => _ScreenTurfUpdateState();

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:echo_booking_owner/core/constent/size/size.dart';
 import 'package:echo_booking_owner/core/constent/text/text.dart';
@@ -15,7 +14,6 @@ import 'package:echo_booking_owner/feature/presentation/widgets/loading_widget.d
 import 'package:echo_booking_owner/feature/presentation/widgets/rich_text_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/showDiolog.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/text_form_widget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

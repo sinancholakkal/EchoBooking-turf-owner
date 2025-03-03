@@ -2,7 +2,6 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:echo_booking_owner/core/constent/text/text.dart';
 import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:echo_booking_owner/domain/repository/auth_service.dart';
-import 'package:echo_booking_owner/feature/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/profile.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_booking/tab_bookings.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/tab_dashboard.dart';
@@ -11,7 +10,6 @@ import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/t
 import 'package:echo_booking_owner/feature/presentation/pages/screen_login/screen_login.dart';
 import 'package:echo_booking_owner/feature/presentation/widgets/heading_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class ScreenHome extends StatefulWidget {

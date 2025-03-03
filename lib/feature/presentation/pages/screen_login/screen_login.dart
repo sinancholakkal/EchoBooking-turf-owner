@@ -14,8 +14,6 @@ import 'package:echo_booking_owner/feature/presentation/widgets/text_form_widget
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
 
 class ScreenLogin extends StatefulWidget {

@@ -9,7 +9,7 @@ class TextWidget extends StatelessWidget {
   final Color? color;
   final double? size;
   final FontWeight? fontWeight;
-  TextWidget({
+  const TextWidget({
     super.key,
     required this.text,
     this.color = kwhite,

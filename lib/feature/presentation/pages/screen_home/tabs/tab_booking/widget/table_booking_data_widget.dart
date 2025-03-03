@@ -27,7 +27,7 @@ class TableDataWidget extends StatelessWidget {
           );
         } else if (state is FetchLoadedState) {
           log("Booking loaded state");
-          log(state.bookigTurfModels[0].turfName);
+          //log(state.bookigTurfModels[0].turfName);
           if (state.bookigTurfModels.isEmpty) {
             return Align(
               alignment: Alignment.center,

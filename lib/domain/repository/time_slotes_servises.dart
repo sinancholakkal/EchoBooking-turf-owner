@@ -16,14 +16,14 @@ class TimeSlotesServises {
   Future<Map<String, List<Map<String, dynamic>>>> addDate(
       BuildContext content) async {
     List<String> dateKeys = timeSlots.keys.toList();
-    DateTime? _picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
       context: content,
       initialDate: DateTime.now(),
       firstDate: DateTime(DateTime.now().year, DateTime.now().month, 1),
       lastDate: DateTime(2100),
     );
-    if(_picked !=null){
-      String newDateKey =DateFormat("yyyy-MM-dd").format(_picked);
+    if(picked !=null){
+      String newDateKey =DateFormat("yyyy-MM-dd").format(picked);
       log(newDateKey);
     timeSlots[newDateKey] = [];
     }
@@ -37,7 +37,7 @@ class TimeSlotesServises {
       String startTime = result.startTime.toString();
       String endTime = result.endTime.toString();
       String time =
-          startTime.substring(10, 15) + " to " + endTime.substring(10, 15);
+          "${startTime.substring(10, 15)} to ${endTime.substring(10, 15)}";
 
       timeSlots[selectedKey]!.add(
         {

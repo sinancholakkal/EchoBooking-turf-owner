@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
 
 class TabBookings extends StatelessWidget {
-  TabBookings({super.key});
+  const TabBookings({super.key});
   
   @override
   Widget build(BuildContext context) {

@@ -3,14 +3,10 @@ import 'dart:developer';
 import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:echo_booking_owner/domain/models/turf_model.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/turf_managing/turf_managing_bloc.dart';
-import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_turf_upload.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/table_heading_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/table_row_widget.dart';
-import 'package:echo_booking_owner/feature/presentation/pages/screen_turf_update/screen_turf_update.dart';
-import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
-import 'package:get/get.dart';
 
 class TabTurfs extends StatefulWidget {
   const TabTurfs({super.key});

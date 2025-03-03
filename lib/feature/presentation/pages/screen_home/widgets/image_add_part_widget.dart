@@ -12,7 +12,7 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 ValueNotifier<List<dynamic>> images = ValueNotifier([]);
 
 class ImageAddingPart extends StatelessWidget {
-  ImageAddingPart({super.key});
+  const ImageAddingPart({super.key});
 
   Future<void> imagePicking() async {
     ImagePicker imagePicker = ImagePicker();

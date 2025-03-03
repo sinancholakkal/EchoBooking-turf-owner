@@ -7,7 +7,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final int maxLine;
-  TextFormFieldWidget({
+  const TextFormFieldWidget({
     super.key,
     this.controller,
     this.validator,

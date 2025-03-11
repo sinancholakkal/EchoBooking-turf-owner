@@ -1,6 +1,7 @@
 
 import 'package:echo_booking_owner/core/theme/colors.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:echo_booking_owner/feature/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/screen_home.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_login/screen_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
   void initState() {
     super.initState();
     context.read<AuthBlocBloc>().add(CheckLoginStatusEvent());
+   
   }
 
   @override

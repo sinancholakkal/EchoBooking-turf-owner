@@ -18,23 +18,19 @@ import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
 
 class ScreenLogin extends StatefulWidget {
   const ScreenLogin({super.key});
-
   @override
   State<ScreenLogin> createState() => _ScreenLoginState();
 }
-
 class _ScreenLoginState extends State<ScreenLogin> {
   late TextEditingController _email;
   late TextEditingController _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

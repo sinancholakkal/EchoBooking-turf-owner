@@ -1,9 +1,12 @@
 import 'package:echo_booking_owner/core/constent/text/text.dart';
 import 'package:echo_booking_owner/core/theme/colors.dart';
+import 'package:echo_booking_owner/domain/models/booking_turf_model.dart';
 import 'package:echo_booking_owner/feature/presentation/bloc/dash_board_bloc/dash_board_bloc.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/widget/card_and_pie_chart_builder.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/widget/revenue_section.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/widget/table_row_part_widget.dart';
 import 'package:echo_booking_owner/feature/presentation/pages/screen_home/widgets/table_heading_widget.dart';
+import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,14 +15,15 @@ class TabDashboard extends StatefulWidget {
   @override
   State<TabDashboard> createState() => _TabDashboardState();
 }
+
 class _TabDashboardState extends State<TabDashboard> {
-  List<int> values = [0, 1, 2, 3, 4];
   ValueNotifier<int> selectedIndex = ValueNotifier(0);
   @override
   void initState() {
     context.read<DashBoardBloc>().add(FetchingDashBoardEvent());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,6 +41,7 @@ class _TabDashboardState extends State<TabDashboard> {
             children: [
               //Card and pie chart bloc builder--------
               CardAndPieChartBuilder(selectedIndex: selectedIndex),
+              RevenueSection(),
               //Table heading----
               TableHeadingWidget(headigs: headigsOfbookigs),
               //Table rows---------
@@ -48,3 +53,4 @@ class _TabDashboardState extends State<TabDashboard> {
     );
   }
 }
+

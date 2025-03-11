@@ -30,8 +30,8 @@ class DropDownWidget extends StatelessWidget {
                 focusColor: Colors.white,
                 isExpanded: true,
                 icon: Icon(Icons.arrow_drop_down),
-                value: value,
-                items: items.map((String item) {
+                value: items.contains(value)?value:items.first,
+                items: items.toSet().map((String item) {
                   return DropdownMenuItem(
                     value: item,
                     child: Text(

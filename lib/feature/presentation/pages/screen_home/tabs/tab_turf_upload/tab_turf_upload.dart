@@ -391,7 +391,7 @@ class _TabTurfUploadState extends State<TabTurfUpload> {
                                                         selectedDateIndex]]!
                                                     .isNotEmpty)
                                               SizedBox(
-                                                width: 500,
+                                                width: 580,
                                                 child: GridView.builder(
                                                   physics:
                                                       NeverScrollableScrollPhysics(),

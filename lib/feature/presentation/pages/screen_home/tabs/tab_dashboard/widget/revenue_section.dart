@@ -1,55 +1,41 @@
-import 'package:echo_booking_owner/core/constent/text/text.dart';
-import 'package:echo_booking_owner/feature/presentation/bloc/dash_board_bloc/dash_board_bloc.dart';
-import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/widget/date_range_revanue_section.dart';
+import 'package:echo_booking_owner/feature/presentation/pages/screen_home/tabs/tab_dashboard/widget/full_revanue_section.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class RevenueSection extends StatelessWidget {
+class RevenueSection extends StatefulWidget {
   const RevenueSection({
     super.key,
   });
+  @override
+  State<RevenueSection> createState() => _RevenueSectionState();
+}
+
+class _RevenueSectionState extends State<RevenueSection> {
+  late TextEditingController dateRangeController;
+  @override
+  void initState() {
+    dateRangeController = TextEditingController(text: "Pick Date");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    dateRangeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DashBoardBloc, DashBoardState>(
-      builder: (context, state) {
-        if (state is FetchLoadedState) {
-          var entryList = state.bookigTurfModels.entries.toList();
-          
-    
-          return Center(
-          child: Container(
-            margin: EdgeInsets.only(bottom: 20),
-            // height: 60,
-            width: 500,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.lightBlue),
-            child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Divider();
-                },
-                separatorBuilder: (context, index) {
-                  var values = entryList[index].value;
-                  double price =0.0;
-                  for(var data in values){
-                  price += double.parse(data.price);
-                  }
-                  return ListTile(
-                    title: TextWidget(text:dashBoardCardText[index]),
-                  trailing: TextWidget(text: "₹${price.toString()}",size: 16,),
-                  );
-                },
-                itemCount: dashBoardCardText.length + 1),
-          ),
-        );
-          
-        }else{
-          return SizedBox();
-        }
-        
-      },
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        //Full revenue Section------------
+        FullRevanueSection(),
+        //Date pick range reveneu------------
+        DateRangeRevanueSection(dateRangeController: dateRangeController)
+      ],
     );
   }
 }
+
+

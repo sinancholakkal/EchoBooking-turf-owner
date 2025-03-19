@@ -1,1 +1,22 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"student-details-f21a8","configurations":{"web":"1:423328495146:web:f8d7c4ef46c221585e7553"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "student-details-f21a8",
+          "configurations": {
+            "web": "1:423328495146:web:f8d7c4ef46c221585e7553"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

@@ -17,42 +17,52 @@ class TableRowWidget extends StatelessWidget {
       children: [
         TableRow(children: [
           //Item no----
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: TableCell(child: TextWidget(text: "${index + 1}"))),
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextWidget(text: "${index + 1}"),
+            ),
           ),
           //Turf name-----
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: TableCell(child: TextWidget(text: data.turfName))),
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextWidget(text: data.turfName),
+            ),
           ),
           //Catogery--------
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: TableCell(child: TextWidget(text: data.catogery))),
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextWidget(text: data.catogery),
+            ),
           ),
           //Phone no----------
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:
-                Center(child: TableCell(child: TextWidget(text: data.phone))),
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextWidget(text: data.phone),
+            ),
           ),
           //Price------------
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:
-                Center(child: TableCell(child: TextWidget(text: data.price))),
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextWidget(text: data.price),
+            ),
           ),
           //Review status--------
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: TableCell(
-                  child: data.reviewStatus.startsWith("rejected")
-                      ? ElevatedButton.icon(
+          TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: data.reviewStatus.startsWith("rejected")
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
                           icon: Icon(Icons.remove_red_eye),
                           onPressed: () {
                             alertBox(
@@ -62,29 +72,31 @@ class TableRowWidget extends StatelessWidget {
                                 title: "Status",
                                 content: data.reviewStatus.split("*")[1]);
                           },
-                          label: Text("Rejected"))
-                      : Text(
-                          (data.reviewStatus == "true") ? "Live" : "Pending",
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
-                        )),
-            ),
-          ),
+                          label: Text("Rejected")),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        (data.reviewStatus == "true") ? "Live" : "Pending",
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    )),
           //View button-----------
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: TableCell(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Get.to(
-                            () => ScreenTurfUpdate(turfModel: data),
-                            transition: Transition.cupertino,
-                            duration: Duration(milliseconds: 700),
-                          );
-                        },
-                        child: Text("View")))),
-          ),
+          TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(
+                        () => ScreenTurfUpdate(turfModel: data),
+                        transition: Transition.cupertino,
+                        duration: Duration(milliseconds: 700),
+                      );
+                    },
+                    child: Text("View")),
+              )),
         ])
       ],
     );

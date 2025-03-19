@@ -4,3 +4,4 @@ part of 'dash_board_bloc.dart';
 sealed class DashBoardEvent {}
 
 class FetchingDashBoardEvent extends DashBoardEvent{}
+

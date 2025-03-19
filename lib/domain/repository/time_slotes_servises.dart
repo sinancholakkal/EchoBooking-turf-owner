@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -22,22 +21,26 @@ class TimeSlotesServises {
       firstDate: DateTime(DateTime.now().year, DateTime.now().month, 1),
       lastDate: DateTime(2100),
     );
-    if(picked !=null){
-      String newDateKey =DateFormat("yyyy-MM-dd").format(picked);
+    if (picked != null) {
+      String newDateKey = DateFormat("yyyy-MM-dd").format(picked);
       log(newDateKey);
-    timeSlots[newDateKey] = [];
+      timeSlots[newDateKey] = [];
     }
     return timeSlots;
   }
 
   Future<Map<String, List<Map<String, dynamic>>>> addTimeSlot(
       String selectedKey, BuildContext context) async {
-    TimeRange? result = await showTimeRangePicker(context: context,minDuration: Duration(hours: 1),maxDuration: Duration(hours: 1));
+    TimeRange? result = await showTimeRangePicker(
+      use24HourFormat: false,
+      context: context,
+      minDuration: Duration(hours: 1),
+      maxDuration: Duration(hours: 1),
+    );
     if (result != null) {
-      String startTime = result.startTime.toString();
-      String endTime = result.endTime.toString();
-      String time =
-          "${startTime.substring(10, 15)} to ${endTime.substring(10, 15)}";
+      String startTime = DateFormat.jm().format(DateTime(0, 1, 1, result.startTime.hour, result.startTime.minute));
+      String endTime = DateFormat.jm().format(DateTime(0, 1, 1, result.endTime.hour, result.endTime.minute));
+      String time ="$startTime to $endTime";
 
       timeSlots[selectedKey]!.add(
         {
@@ -46,7 +49,8 @@ class TimeSlotesServises {
         },
       );
 
-      print(result);
+      log(startTime);
+      log(endTime);
     }
     return timeSlots;
   }

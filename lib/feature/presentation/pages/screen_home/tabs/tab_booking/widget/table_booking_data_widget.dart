@@ -5,6 +5,7 @@ import 'package:echo_booking_owner/feature/presentation/bloc/bookings_bloc/booki
 import 'package:echo_booking_owner/feature/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
+
 class TableDataWidget extends StatelessWidget {
   const TableDataWidget({
     super.key,
@@ -41,15 +42,14 @@ class TableDataWidget extends StatelessWidget {
           }
           //Table row--------------
           return ListView.builder(
-            shrinkWrap:
-                true, // Important to avoid infinite height issue
+            shrinkWrap: true, // Important to avoid infinite height issue
             physics:
                 NeverScrollableScrollPhysics(), // Disable internal scrolling
             itemCount: state.bookigTurfModels.length,
             itemBuilder: (context, index) {
               BookingTurfmodel data = state.bookigTurfModels[index];
               log(data.turfName);
-    
+
               List<String> values = [
                 "${index + 1}",
                 data.userName,
@@ -65,13 +65,18 @@ class TableDataWidget extends StatelessWidget {
                 children: [
                   TableRow(
                     children: values
-                        .map((value) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                  child: TableCell(
-                                      child:
-                                      (value.contains("*"))?TextWidget(text: "${value.split("*")[0]}\n${value.split("*")[1]}"):
-                                          TextWidget(text: value))),
+                        .map((value) => TableCell(
+                              verticalAlignment: TableCellVerticalAlignment
+                                  .middle, // Ensures alignment
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: TextWidget(
+                                  text: (value.contains("*"))
+                                      ? "${value.split("*")[0]}\n${value.split("*")[1]}"
+                                      : value,
+                                  //textAlign: TextAlign.center, // Align text
+                                ),
+                              ),
                             ))
                         .toList(),
                   ),

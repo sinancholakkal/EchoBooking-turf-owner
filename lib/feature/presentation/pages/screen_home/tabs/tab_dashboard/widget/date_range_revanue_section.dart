@@ -87,7 +87,7 @@ class DateRangeRevanueSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextWidget(text: "${state.fromDate} to ${state.toDate}",size: 15,color: Colors.white70,),
-                          TextWidget(text: state.revenueAmount,size: 15,color: Colors.white70,)
+                          TextWidget(text: "₹${state.revenueAmount}",size: 15,color: Colors.white70,)
                         ],
                       )
                     ],

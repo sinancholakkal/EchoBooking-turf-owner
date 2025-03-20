@@ -69,4 +69,35 @@ class DashBoardService {
 
     return turfModels;
   }
+  //Fetching revanue based on the date range
+  Future<String>fetchRevanueDateRange({required String startD, required String endD})async{
+    num revanue = 0;
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('owner')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('bookings')
+        .get();
+
+        for(var bookingDoc in snapshot.docs){
+          final booking = bookingDoc.data();
+          num price = double.parse(booking['price']);
+          DateTime date =
+          DateFormat("dd-MM-yyyy").parse(booking['bookingdate']);
+          DateTime startDate =
+          DateFormat("dd-MM-yyyy").parse(startD);
+          DateTime endDate =
+          DateFormat("dd-MM-yyyy").parse(endD);
+          
+          if(startDate.isBefore(date) && endDate.isAfter(date) || startDate.isAtSameMomentAs(date) || endDate.isAtSameMomentAs(date)){
+            log(date.toString());
+            log("======================");
+            revanue +=price;
+          }
+
+
+        }
+
+    return revanue.toString();
+  }
 }

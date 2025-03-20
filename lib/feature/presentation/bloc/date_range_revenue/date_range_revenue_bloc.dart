@@ -39,7 +39,7 @@ class DateRangeRevenueBloc
             emit(DateRangeRevenueLoading());
             final String revanue = await DashBoardService().fetchRevanueDateRange(startD: startD!,endD: endD!);
             emit(DateRangeRevenueLoaded(
-                fromDate: startD!, toDate: endD!, revenueAmount: revanue));
+                fromDate: formatMonth(startD!), toDate: formatMonth(endD!), revenueAmount: revanue));
           }
         } catch (e) {
           log("Somthing issue while fetching date range revenue $e");
@@ -51,4 +51,8 @@ class DateRangeRevenueBloc
 
 String formatDate(DateTime date) {
   return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
+}
+String formatMonth(String d) {
+  DateTime date = DateFormat("dd-MM-yyyy").parse(d);
+  return "${date.day} ${DateFormat('MMMM').format(date)} ${date.year}";
 }
